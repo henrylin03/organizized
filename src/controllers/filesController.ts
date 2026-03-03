@@ -1,4 +1,5 @@
-import type { NextFunction, Request, Response } from "express";
+import type { Request, Response } from "express";
+import { cloudinary } from "@/config/cloudinary.js";
 import { upload } from "@/lib/multer.js";
 import { prisma } from "@/lib/prisma.js";
 import { getFileExtension } from "@/utils/helpers.js";
@@ -78,17 +79,14 @@ export const uploadFileGet = async (req: Request, res: Response) => {
 };
 
 export const uploadFilePost = [
-	async (req: Request, res: Response, next: NextFunction) => {
-		const { user } = req;
-		if (!user) return res.status(401).redirect("/login");
-		next();
-	},
-
 	upload.single("file"),
-
 	async (req: Request, res: Response) => {
-		const { user } = req;
+		const { user, file: fileForUpload } = req;
 		if (!user) return res.status(401).redirect("/login");
+		if (!fileForUpload)
+			throw new Error(
+				"Issue with retrieving file that was just uploaded. Please try again.",
+			);
 
 		const { folder: folderIdToAddFile } = req.query;
 		if (!folderIdToAddFile)
@@ -97,11 +95,17 @@ export const uploadFilePost = [
 				errorMessage: "You must add your file to an existing folder.",
 			});
 
-		const fileForUpload = req.file;
-		if (!fileForUpload)
-			throw new Error(
-				"Issue with retrieving file that was just uploaded. Please try again.",
-			);
+		try {
+			const b64 = Buffer.from(fileForUpload.buffer).toString("base64");
+			const dataUri = `data:${fileForUpload.mimetype};base64,${b64}`;
+			const cloudinaryUploadResult = await cloudinary.uploader.upload(dataUri, {
+				resource_type: "auto",
+			});
+			console.log("cloudinaryUploadResult:", cloudinaryUploadResult);
+		} catch (err) {
+			if (err instanceof Error) throw new Error(err.message);
+			throw new Error(`Error when uploading file to cloud: ${err}`);
+		}
 
 		const {
 			filename: filenameWithUniqueSuffix,
