@@ -126,7 +126,7 @@ export const uploadFilePost = [
 					? uniqueDisplayName
 					: fileForUpload.originalname,
 				sizeInKb: fileForUpload.size,
-				location: cloudinaryUploadResult.secure_url,
+				url: cloudinaryUploadResult.secure_url,
 				userId: user.id,
 				folderId: Number(folderIdToAddFile),
 				fileExtension: `.${cloudinaryUploadResult.format}`,
