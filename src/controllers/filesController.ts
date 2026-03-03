@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { cloudinary } from "@/config/cloudinary.js";
 import { upload } from "@/lib/multer.js";
 import { prisma } from "@/lib/prisma.js";
-import { getFileExtension } from "@/utils/helpers.js";
+import { generateUniqueFilename } from "@/utils/helpers.js";
 
 const getAllowedFileTypesForUpload = (): string => {
 	const MS_WORD_FILE_TYPES = [
@@ -95,48 +95,53 @@ export const uploadFilePost = [
 				errorMessage: "You must add your file to an existing folder.",
 			});
 
+		let cloudinaryUploadResult = null;
 		try {
 			const b64 = Buffer.from(fileForUpload.buffer).toString("base64");
 			const dataUri = `data:${fileForUpload.mimetype};base64,${b64}`;
-			const cloudinaryUploadResult = await cloudinary.uploader.upload(dataUri, {
+			cloudinaryUploadResult = await cloudinary.uploader.upload(dataUri, {
 				resource_type: "auto",
+				public_id: generateUniqueFilename(fileForUpload),
 			});
-			console.log("cloudinaryUploadResult:", cloudinaryUploadResult);
 		} catch (err) {
+			console.error(err);
 			if (err instanceof Error) throw new Error(err.message);
 			throw new Error(`Error when uploading file to cloud: ${err}`);
 		}
 
-		const {
-			filename: filenameWithUniqueSuffix,
-			originalname,
-			size,
-			path,
-		} = fileForUpload;
+		console.log("fileForUpload:", fileForUpload);
+		console.log("cloudinaryUploadResult:", cloudinaryUploadResult);
 
-		const fileWithSameOriginalName = await prisma.file.findMany({
-			where: {
-				name: originalname,
-				userId: user.id,
-				folderId: Number(folderIdToAddFile),
-			},
-		});
-		const hasDuplicateOriginalFilenameInFolder =
-			Array.isArray(fileWithSameOriginalName) &&
-			fileWithSameOriginalName.length > 0;
+		// const {
+		//   filename: filenameWithUniqueSuffix,
+		//   originalname,
+		//   size,
+		//   path,
+		// } = fileForUpload;
 
-		const newFile = await prisma.file.create({
-			data: {
-				name: hasDuplicateOriginalFilenameInFolder
-					? filenameWithUniqueSuffix
-					: originalname,
-				sizeInKb: size,
-				fileExtension: getFileExtension(fileForUpload),
-				location: path,
-				userId: user.id,
-				folderId: Number(folderIdToAddFile),
-			},
-		});
+		// const fileWithSameOriginalName = await prisma.file.findMany({
+		//   where: {
+		//     name: originalname,
+		//     userId: user.id,
+		//     folderId: Number(folderIdToAddFile),
+		//   },
+		// });
+		// const hasDuplicateOriginalFilenameInFolder =
+		//   Array.isArray(fileWithSameOriginalName) &&
+		//   fileWithSameOriginalName.length > 0;
+
+		// const newFile = await prisma.file.create({
+		// 	data: {
+		// 		name: hasDuplicateOriginalFilenameInFolder
+		// 			? filenameWithUniqueSuffix
+		// 			: originalname,
+		// 		sizeInKb: size,
+		// 		fileExtension: getFileExtension(fileForUpload),
+		// 		location: path,
+		// 		userId: user.id,
+		// 		folderId: Number(folderIdToAddFile),
+		// 	},
+		// });
 
 		res.redirect(`/folders/${newFile.folderId}`);
 	},
