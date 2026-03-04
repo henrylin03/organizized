@@ -3,6 +3,7 @@ import { cloudinary } from "@/config/cloudinary.js";
 import { upload } from "@/lib/multer.js";
 import { prisma } from "@/lib/prisma.js";
 import { generateUniqueFilename, getFileExtension } from "@/utils/helpers.js";
+import { getCloudinaryDownloadLink } from "../utils/helpers";
 
 const getAllowedFileTypesForUpload = (): string => {
 	const MS_WORD_FILE_TYPES = [
@@ -127,7 +128,9 @@ export const uploadFilePost = [
 					? uniqueDisplayName
 					: fileForUpload.originalname,
 				sizeInKb: fileForUpload.size,
-				url: cloudinaryUploadResult.secure_url,
+				downloadUrl: getCloudinaryDownloadLink(
+					cloudinaryUploadResult.secure_url,
+				),
 				userId: user.id,
 				folderId: Number(folderIdToAddFile),
 				fileExtension: cloudinaryUploadResult.format

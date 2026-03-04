@@ -24,7 +24,7 @@ model File {
   sizeInKb      Int
   fileExtension String
   uploadedAt    DateTime @default(now())
-  url           String   @unique
+  downloadUrl   String   @unique
   user          User     @relation(fields: [userId], references: [id])
   userId        String
   folder        Folder   @relation(fields: [folderId], references: [id])

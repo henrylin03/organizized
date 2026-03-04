@@ -13,3 +13,13 @@ export const getFileExtension = (file: Express.Multer.File): `.${string}` => {
 	const fileExtension = originalNameSplit.pop();
 	return `.${fileExtension}`;
 };
+
+export const getCloudinaryDownloadLink = (
+	cloudinarySecureUrl: string,
+): string => {
+	const ATTACHMENT_FLAG_REQUIRED_TO_DOWNLOAD_FILE = "fl_attachment";
+	return cloudinarySecureUrl.replace(
+		"/upload/",
+		`/upload/${ATTACHMENT_FLAG_REQUIRED_TO_DOWNLOAD_FILE}/`,
+	);
+};
