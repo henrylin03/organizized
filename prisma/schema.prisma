@@ -20,7 +20,8 @@ model User {
 
 model File {
   id            Int      @id @default(autoincrement())
-  name          String
+  name          String   @unique
+  displayName   String
   sizeInKb      Int
   fileExtension String
   uploadedAt    DateTime @default(now())
@@ -30,7 +31,7 @@ model File {
   folder        Folder   @relation(fields: [folderId], references: [id])
   folderId      Int
 
-  @@unique(name: "fileId", [userId, name, folderId])
+  @@unique(name: "fileId", [userId, displayName, folderId])
 }
 
 model Folder {

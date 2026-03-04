@@ -1,7 +1,7 @@
 <article class="shadow-md bg-gray-100 rounded-md hover:-translate-y-1 transition-transform flex items-center gap-8">
   <a href="/files/<%= it.file.id %>" class="p-4 flex items-center gap-2">
     <img src="<%= it.fileTypeToImgMap[it.file.fileExtension] ?? '/icons/file.svg'  %>" class="w-6 h-6 opacity-80" alt="icon for <%= it.file.fileExtension %> files" />
-    <span><%= it.file.name %></span>
+    <span><%= it.file.displayName %></span>
   </a>
   <div class="dropdown dropdown-end">
     <button type="button" tabindex="0" role="button" class="btn m-1 btn-circle btn-ghost btn-xs">

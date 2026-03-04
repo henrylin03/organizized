@@ -37,7 +37,7 @@
       />
       <path d="M19 7h-4l-.001 -4.001z" />
     </svg>
-    <span> <%= it.file.name %> </span>
+    <span> <%= it.file.displayName %> </span>
   </h1>
 
   <a
@@ -57,7 +57,7 @@
         <tbody>
           <tr>
             <th scope="row">File name</th>
-            <td><%= it.file.name %></td>
+            <td><%= it.file.displayName %></td>
           </tr>
           <tr>
             <th scope="row">File size</th>
