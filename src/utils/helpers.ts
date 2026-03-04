@@ -18,6 +18,11 @@ export const getCloudinaryDownloadLink = (
 	cloudinarySecureUrl: string,
 ): string => {
 	const ATTACHMENT_FLAG_REQUIRED_TO_DOWNLOAD_FILE = "fl_attachment";
+	if (!cloudinarySecureUrl.includes("/upload/"))
+		throw new Error(
+			"Invalid file URL. Please ensure that the URL includes '/upload'.",
+		);
+
 	return cloudinarySecureUrl.replace(
 		"/upload/",
 		`/upload/${ATTACHMENT_FLAG_REQUIRED_TO_DOWNLOAD_FILE}/`,
