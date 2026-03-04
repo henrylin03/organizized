@@ -23,8 +23,8 @@
   </a>
 </header>
 
-<main class="prose mt-4">
-  <h1 class="flex items-center gap-2">
+<main class="prose mt-4 flex flex-col gap-8">
+  <h1 class="flex items-center gap-2 mb-0">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
@@ -39,6 +39,15 @@
     </svg>
     <span> <%= it.file.name %> </span>
   </h1>
+
+  <a
+    href="<%= it.file.downloadUrl %>"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="btn btn-primary btn-outline w-fit"
+    role="button"
+    >Download</a
+  >
 
   <section class="flex flex-col gap-4">
     <article
