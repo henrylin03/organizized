@@ -9,7 +9,14 @@ import {
 	getFileExtension,
 } from "@/utils/helpers.js";
 
-const ALLOWED_FILE_TYPES_FOR_UPLOAD = ["image/*", ".pdf"];
+const ALLOWED_MIMETYPES_FOR_UPLOAD = [
+	"image/jpg",
+	"image/png",
+	"image/jpeg",
+	"application/pdf",
+];
+
+const MAX_FILESIZE_FOR_UPLOAD_IN_KB = 2 * 1024 * 1024; // 2MB
 
 export const filesGet = (_req: Request, res: Response) => {
 	res.redirect("/");
@@ -59,7 +66,7 @@ export const uploadFileGet = async (req: Request, res: Response) => {
 
 	res.render("pages/newFile", {
 		title: "Upload new file",
-		allowedFileTypes: ALLOWED_FILE_TYPES_FOR_UPLOAD,
+		allowedFileTypes: ALLOWED_MIMETYPES_FOR_UPLOAD,
 		folderIdToAddFile,
 	});
 };
@@ -81,6 +88,16 @@ export const uploadFilePost = [
 			throw new Error(
 				"Issue with retrieving file that was just uploaded. Please try again.",
 			);
+
+		if (
+			!ALLOWED_MIMETYPES_FOR_UPLOAD.includes(fileForUpload.mimetype) ||
+			fileForUpload.size > MAX_FILESIZE_FOR_UPLOAD_IN_KB
+		)
+			return res.status(400).render("pages/error", {
+				statusCode: 400,
+				errorMessage:
+					"Only PDFs and image files (jpg, png) less than 2MB can be uploaded.",
+			});
 
 		const { folder: folderIdToAddFile } = req.query;
 		if (!folderIdToAddFile)
