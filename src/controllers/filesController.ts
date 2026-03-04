@@ -153,12 +153,37 @@ export const fileDelete = async (req: Request, res: Response) => {
 
 	const { id: fileId } = req.params;
 
-	const deleteFile = await prisma.file.delete({
+	const file = await prisma.file.findUnique({
+		where: { id: Number(fileId) },
+	});
+	if (!file)
+		return res.status(404).render("pages/error", {
+			statusCode: 404,
+			errorMessage: "File has already been deleted.",
+		});
+
+	const _deleteFile = await prisma.file.delete({
 		where: {
-			id: Number(fileId),
+			id: file.id,
 			userId: user.id,
 		},
 	});
 
-	res.redirect(`/folders/${deleteFile.folderId}`);
+	let cloudinaryDeleteResult = null;
+	try {
+		cloudinaryDeleteResult = await cloudinary.uploader.destroy(file.name);
+	} catch (err) {
+		console.error(err);
+		if (err instanceof Error) throw new Error(err.message);
+		throw new Error(`Error when deleting file from cloud: ${err}`);
+	}
+
+	if (cloudinaryDeleteResult.result === "ok")
+		res.redirect(`/folders/${file.folderId}`);
+	else
+		res.status(404).render("pages/error", {
+			statusCode: 404,
+			errorMessage:
+				"An error occurred when trying to delete that file from the cloud. It's possible that the file has already been deleted. Please refresh the folder.",
+		});
 };
