@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
 @import "tailwindcss";
 @plugin "daisyui" {
 	themes: false;
@@ -38,3 +40,24 @@
 }
 
 @plugin "@tailwindcss/typography";
+
+@layer base {
+	* {
+		font-family: "Roboto", Calibri, Arial, Helvetica, sans-serif;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		text-wrap: balance;
+		font-family: "Josefin Sans", Calibri, Arial, Helvetica, sans-serif;
+	}
+
+	p,
+	a {
+		text-wrap: pretty;
+	}
+}
