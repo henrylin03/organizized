@@ -61,4 +61,10 @@ const signupPost = [
 	},
 ];
 
-export { loginGet, loginPost, signupGet, signupPost };
+const usernameCheckGet = (req: Request, res: Response) => {
+	// check if username exists within database
+	// if yes, render proper login page [might need to separate the two pages]
+	// if no, then render sign up page
+};
+
+export { loginGet, loginPost, signupGet, signupPost, usernameCheckGet };

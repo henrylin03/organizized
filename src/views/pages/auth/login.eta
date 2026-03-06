@@ -3,7 +3,7 @@
 <main class="h-full flex flex-col items-center justify-center">
   <section class="mx-auto">
     <h1 class="text-5xl text-neutral text-center">Log in or sign up</h1>
-    <form action="" method="post">
+    <form action="/username-check" method="post">
       <label for="emailInput">Email</label>
       <input
         type="email"
