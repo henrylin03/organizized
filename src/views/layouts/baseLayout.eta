@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= it.title ? it.title : "Files" %> | Upload and share files</title>
+  <title><%= it.title ? it.title : "Better manage your files" %> | Get Organizized</title>
   <link rel="stylesheet" href="/css/output.css" />
 </head>
 
 <body>
+  <%~ include("/partials/header") %>
   <%~ it.body %>
 </body>
 
