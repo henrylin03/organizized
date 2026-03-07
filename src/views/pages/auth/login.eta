@@ -1,7 +1,7 @@
 <% layout("/layouts/authLayout") %>
 
 <main class="h-full flex flex-col items-center justify-center">
-  <div class="w-lg mx-auto p-20">
+  <div class="max-w-sm mx-auto px-6 py-20">
     <h1 class="text-5xl text-neutral text-center mb-2">Log in</h1>
     <%~ include("/partials/errors/errorBlock", { options: true }) %>
     <form
