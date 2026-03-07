@@ -19,11 +19,15 @@ type LoginField = keyof typeof LOGIN_ERROR_MESSAGES;
 const loginGet = async (req: Request, res: Response) => {
 	if (req.user) return res.redirect("/");
 
-	const { session } = req;
-	if (!session.messages || !session.messages.length)
+	if (
+		typeof req.session.messages === "undefined" ||
+		!req.session.messages.length
+	)
 		return res.render("pages/auth/login", { title: PAGE_TITLES.login });
 
-	const loginFieldWithError: LoginField = session.messages.at(-1);
+	const loginFieldWithError: LoginField = req.session.messages.at(-1);
+	req.session.messages.length = 0; // clear array
+
 	res.render("pages/auth/login", {
 		title: PAGE_TITLES.login,
 		error: LOGIN_ERROR_MESSAGES[loginFieldWithError],
@@ -67,7 +71,7 @@ const signupPost = [
 			data: {
 				firstName,
 				lastName,
-				email,
+				username: email,
 				password: hashedPassword,
 			},
 		});

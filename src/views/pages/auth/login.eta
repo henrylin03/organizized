@@ -1,38 +1,20 @@
 <% layout("/layouts/authLayout") %>
 
 <main class="h-full flex flex-col items-center justify-center">
-  <div class="max-w-sm mx-auto px-6 py-20">
+  <div class="w-sm mx-auto px-6 py-20">
     <h1 class="text-5xl text-neutral text-center mb-2">Log in</h1>
+    <% if (Array.isArray(it.errors) && it.errors.length > 0) { %>
     <%~ include("/partials/errors/errorBlock", { error: it.error }) %>
-    <form
-      action="/login"
-      method="post"
-      class="flex flex-col items-center gap-6 w-full"
-    >
+    <% } %>
+    <form action="/login" method="post" class="flex flex-col items-center gap-6 w-full">
       <ul class="flex flex-col gap-2 w-full">
         <li>
-          <label for="emailInput" class="text-sm text-neutral opacity-60"
-            >Email</label
-          >
-          <input
-            type="text"
-            id="emailInput"
-            name="username"
-            class="input w-full"
-            required
-          />
+          <label for="emailInput" class="text-sm text-neutral opacity-60">Email</label>
+          <input type="text" id="emailInput" name="username" class="input w-full" required />
         </li>
         <li>
-          <label for="passwordInput" class="text-sm text-neutral opacity-60"
-            >Password</label
-          >
-          <input
-            type="password"
-            id="passwordInput"
-            name="password"
-            class="input w-full"
-            required
-          />
+          <label for="passwordInput" class="text-sm text-neutral opacity-60">Password</label>
+          <input type="password" id="passwordInput" name="password" class="input w-full" required />
         </li>
       </ul>
       <button type="submit" class="btn btn-primary btn-lg w-full">
@@ -41,9 +23,7 @@
     </form>
     <p class="text-sm text-center mt-4 text-neutral-500">
       Not a member yet?
-      <a href="/signup" class="link link-hover link-primary font-bold"
-        >Sign up for free</a
-      >
+      <a href="/signup" class="link link-hover link-primary font-bold">Sign up for free</a>
     </p>
   </div>
 </main>
