@@ -24,7 +24,7 @@ const loginPost = passport.authenticate("local", {
 
 const signupGet = async (req: Request, res: Response) => {
 	if (req.user) return res.redirect("/");
-	res.render("pages/signup", { title: "Sign up" });
+	res.render("pages/auth/signup", { title: "Sign up" });
 };
 
 const signupPost = [
