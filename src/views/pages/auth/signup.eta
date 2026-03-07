@@ -2,7 +2,7 @@
 
 <main class="h-full flex flex-col items-center justify-center">
   <div class="max-w-lg mx-auto px-6 py-20">
-    <h1 class="text-5xl text-neutral text-center mb-4">Sign up for free</h1>
+    <h1 class="text-[2.75rem] sm:text-5xl text-neutral text-center mb-4">Sign up for free</h1>
     <% if (Array.isArray(it.errors) && it.errors.length > 0) { %>
     <%~ include("partials/errors/errorList", { options: true }) %>
     <% } %>
